@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="uk">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#07120f" />
+    <meta name="description" content="Невеликий сад, де думки стають світлом." />
+    <meta property="og:title" content="Сад випадкових думок" />
+    <meta property="og:description" content="Посади коротку думку. Вона отримає власну форму, колір і тихе життя." />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="uk_UA" />
+    <meta name="twitter:card" content="summary" />
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='50' fill='%2307120f'/%3E%3Ccircle cx='50' cy='42' r='17' fill='%23d7f66c'/%3E%3Cpath d='M50 58v27' stroke='%2370d6c1' stroke-width='6' stroke-linecap='round'/%3E%3C/svg%3E" />
+    <title>Сад випадкових думок</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <canvas id="garden" aria-hidden="true"></canvas>
+
+    <header class="masthead">
+      <a class="mark" href="#top" aria-label="На початок">
+        <span class="mark-dot"></span>
+        <span>тихий експеримент № 01</span>
+      </a>
+      <button class="sound-toggle" id="soundToggle" type="button" aria-label="Увімкнути тихий звук" aria-pressed="false">
+        <span class="sound-icon" aria-hidden="true">♪</span>
+        <span id="soundLabel">увімкнути тишу</span>
+      </button>
+    </header>
+
+    <main id="top">
+      <section class="hero" aria-labelledby="title">
+        <p class="eyebrow">місце для того, що не хочеться губити</p>
+        <h1 id="title">Сад випадкових<br /><em>думок</em></h1>
+        <p class="intro">
+          Посади коротку думку. Вона отримає власну форму, колір і тихе життя —
+          тільки у твоєму браузері.
+        </p>
+        <button class="plant-trigger" id="openComposer" type="button">
+          <span>посадити думку</span>
+          <span class="arrow" aria-hidden="true">↘</span>
+        </button>
+      </section>
+
+      <aside class="garden-status" aria-live="polite">
+        <span class="status-number" id="plantCount">00</span>
+        <span class="status-copy">думок<br />росте тут</span>
+      </aside>
+
+      <section class="instructions" aria-label="Як користуватися садом">
+        <p><span>01</span> рухай курсором — сад помічає тебе</p>
+        <p><span>02</span> торкнись рослини — згадай її думку</p>
+        <p><span>03</span> усе залишається лише на цьому пристрої</p>
+      </section>
+    </main>
+
+    <dialog class="composer" id="composer">
+      <form method="dialog" id="thoughtForm">
+        <div class="composer-topline">
+          <span>нова насінина</span>
+          <button class="close" value="cancel" aria-label="Закрити" type="submit">×</button>
+        </div>
+        <label for="thought">Що сьогодні<br />варто <em>зберегти?</em></label>
+        <div class="input-wrap">
+          <textarea id="thought" name="thought" maxlength="90" rows="3" placeholder="одне речення…" required></textarea>
+          <span class="counter"><b id="charCount">0</b>/90</span>
+        </div>
+        <div class="mood-row">
+          <span>настрій</span>
+          <div class="moods" role="radiogroup" aria-label="Настрій думки">
+            <label><input type="radio" name="mood" value="warm" checked /><span class="mood warm" title="Теплий"></span></label>
+            <label><input type="radio" name="mood" value="cool" /><span class="mood cool" title="Спокійний"></span></label>
+            <label><input type="radio" name="mood" value="bright" /><span class="mood bright" title="Яскравий"></span></label>
+            <label><input type="radio" name="mood" value="quiet" /><span class="mood quiet" title="Тихий"></span></label>
+          </div>
+        </div>
+        <button class="submit-seed" value="default" type="submit">
+          <span>посадити насінину</span><span aria-hidden="true">→</span>
+        </button>
+      </form>
+    </dialog>
+
+    <div class="thought-card" id="thoughtCard" role="status" aria-live="polite">
+      <button id="closeCard" aria-label="Закрити думку">×</button>
+      <p id="cardText"></p>
+      <time id="cardDate"></time>
+    </div>
+
+    <div class="toast" id="toast" role="status">думку посаджено</div>
+
+    <footer>
+      <span>вирощено без хмар і акаунтів</span>
+      <button id="clearGarden" type="button">очистити сад</button>
+    </footer>
+
+    <script src="garden.js"></script>
+  </body>
+</html>

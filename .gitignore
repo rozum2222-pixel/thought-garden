@@ -1,0 +1,6 @@
+node_modules/
+.pnpm-store/
+.wrangler/
+.dev.vars
+.env
+*.log
