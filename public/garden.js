@@ -10,6 +10,8 @@
   const cardDate = document.querySelector('#cardDate');
   const toast = document.querySelector('#toast');
   const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const MAX_PLANTS = 120;
+  const MAX_THOUGHT_LENGTH = 90;
 
   const palettes = {
     warm: ['#ff8f70', '#ffc08c', '#e75452'],
@@ -28,8 +30,38 @@
   let motes = [];
   let hovered = null;
 
+  function normalizePlant(value) {
+    if (!value || typeof value !== 'object') return null;
+
+    const text = typeof value.text === 'string'
+      ? value.text.trim().slice(0, MAX_THOUGHT_LENGTH)
+      : '';
+    if (!text) return null;
+
+    const mood = Object.prototype.hasOwnProperty.call(palettes, value.mood)
+      ? value.mood
+      : 'warm';
+    const createdValue = Number(value.created);
+    const created = Number.isFinite(createdValue) && createdValue > 0
+      ? Math.min(createdValue, Date.now())
+      : Date.now();
+    const seedValue = Number(value.seed);
+    const seed = Number.isSafeInteger(seedValue)
+      ? Math.abs(seedValue)
+      : hash(text + created);
+
+    return { text, mood, created, seed };
+  }
+
   function loadPlants() {
-    try { return JSON.parse(localStorage.getItem('thought-garden') || '[]'); }
+    try {
+      const stored = JSON.parse(localStorage.getItem('thought-garden') || '[]');
+      if (!Array.isArray(stored)) return [];
+      return stored
+        .slice(-MAX_PLANTS)
+        .map(normalizePlant)
+        .filter(Boolean);
+    }
     catch { return []; }
   }
 
@@ -202,6 +234,7 @@
     const mood = new FormData(form).get('mood');
     const plant = { text, mood, created: Date.now(), seed: hash(text + Date.now()) };
     plants.push(plant);
+    if (plants.length > MAX_PLANTS) plants = plants.slice(-MAX_PLANTS);
     savePlants();
     textarea.value = '';
     document.querySelector('#charCount').textContent = '0';
